@@ -5,6 +5,9 @@ import { styles } from './styles';
 import { LoginTypes } from '../../navigations/login.navigation';
 import { colors } from '../../styles/colors';
 import { ButtonInterface } from '../../components/ButtonInterface';
+import { apiUser } from "../../services/data";
+import { useAuth } from "../../hook/auth";
+import { AxiosError } from 'axios';
 
 export interface IRegister{
     name?: string;
@@ -14,15 +17,25 @@ export interface IRegister{
 
 export function Register({ navigation}: LoginTypes){
     const [data, setData] = useState<IRegister>();
-    async function handleSignIn(){
+    const { setLoading } = useAuth()
+    async function handleRegister(){
         if (data?.email && data.name && data.password){
-            console.log(data)
+            setLoading(true)
+            try{
+                const response = await apiUser.register(data)
+                Alert.alert(`${response.data.name} cadastrado!!!`)
+                navigation.navigate("Login")
+            }catch(error){
+                const err = error as AxiosError
+                const msg = err.response?.data as string
+                Alert.alert(msg)
+            }
         }else{
             Alert.alert("Preencha todos os campos!!!!");
         }
     }
 
-    function handleRegister(){
+    function handleSignIn(){
         navigation.navigate("Login")
     }
 
