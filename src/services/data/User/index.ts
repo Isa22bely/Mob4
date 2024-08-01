@@ -24,7 +24,8 @@ export interface IAuthenticated{
 
 class UserData{
     register(data: IUser){
-        return api.post<IResponseUser>('/register', data)
+        console.log(data)
+        return api.post<IResponseUser>("/register",data)
     }
     login(data: IUser){
         return api.post<IAuthenticated>('/login', data)

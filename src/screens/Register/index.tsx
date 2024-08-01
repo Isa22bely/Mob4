@@ -23,13 +23,19 @@ export function Register({ navigation}: LoginTypes){
             setLoading(true)
             try{
                 const response = await apiUser.register(data)
+                setLoading(false)
                 Alert.alert(`${response.data.name} cadastrado!!!`)
+               
                 navigation.navigate("Login")
             }catch(error){
                 const err = error as AxiosError
+                console.log(err.response)
                 const msg = err.response?.data as string
-                Alert.alert(msg)
+                console.log(msg)
+                // Alert.alert(msg)
+                setLoading(false)
             }
+            setLoading(false)
         }else{
             Alert.alert("Preencha todos os campos!!!!");
         }
@@ -41,10 +47,6 @@ export function Register({ navigation}: LoginTypes){
 
     function handlChange(item: IRegister){
         setData({...data, ...item});
-    }
-
-    function handleGoBack(): void {
-        throw new Error('Function not implemented.');
     }
 
     return(
@@ -82,7 +84,7 @@ export function Register({ navigation}: LoginTypes){
                      onChangeText={(i) => handlChange({password: i})} />
                 </View>
                 <ButtonInterface title='Salvar' type='primary' onPressI={handleRegister} />
-                <ButtonInterface title='Voltar' type='secondary' onPressI={handleGoBack} />
+                <ButtonInterface title='Voltar' type='secondary' onPressI={handleSignIn} />
             </KeyboardAvoidingView>
         </View>
     );
